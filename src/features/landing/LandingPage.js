@@ -18,7 +18,6 @@ const plans = [
     description: 'More control for clubs running a full season.',
     features: ['Everything in Starter', 'Saved squads and auction history', 'Shareable team summaries'],
     action: 'Choose Club',
-    featured: true,
   },
   {
     name: 'League',
@@ -74,6 +73,40 @@ function AuctionBoard() {
       </div>
       <div className="auction-board__foot"><span>Squad balance</span><span className="balance-indicator">ON TRACK</span></div>
     </div>
+  );
+}
+
+function AuctionAd() {
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  return (
+    <aside className={`auction-ad${isPlaying ? '' : ' auction-ad--paused'}`} aria-label="AI auction assistant concept preview">
+      <div className="auction-ad__copy">
+        <span className="auction-ad__eyebrow"><span /> AI AUCTION ASSISTANT <b>CONCEPT PREVIEW</b></span>
+        <h3>Read the room.<br /><em>Pick your moment.</em></h3>
+        <p>A glimpse of how an AI co-pilot could surface player fit and budget insights while the bidding is live.</p>
+        <button
+          className="auction-ad__toggle"
+          type="button"
+          aria-pressed={isPlaying}
+          onClick={() => setIsPlaying((playing) => !playing)}
+        >
+          <span aria-hidden="true">{isPlaying ? 'Ⅱ' : '▶'}</span>
+          {isPlaying ? 'Pause preview' : 'Play preview'}
+        </button>
+      </div>
+      <div className="auction-ad__screen" aria-hidden="true">
+        <div className="auction-ad__screen-top"><span><i /> AUCTION IQ</span><span>LIVE · 00:18</span></div>
+        <div className="auction-ad__player-card">
+          <span className="auction-ad__avatar">AR</span>
+          <span className="auction-ad__player-info"><b>Arjun Rao</b><small>ALL-ROUNDER · 82 RATING</small></span>
+          <span className="auction-ad__fit">92%<small>TEAM FIT</small></span>
+        </div>
+        <div className="auction-ad__insight"><span>✦ AI INSIGHT</span><b>Strong balance pick</b><small>Fits your squad · purse stays healthy</small></div>
+        <div className="auction-ad__bars"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
+        <div className="auction-ad__screen-foot"><span>FALCONS PURSE</span><b>₹ 42.5L left</b><span className="auction-ad__pulse">● ANALYZING</span></div>
+      </div>
+    </aside>
   );
 }
 
@@ -157,10 +190,11 @@ function LandingPage({ user, sessionReady, onAuthenticated, onLogout }) {
               <p>From the first player called to the final purse check, Cricauction keeps the moving parts together—so teams can bid with intent and organizers can stay in control.</p>
             </div>
             <div className="feature-grid">
-              <article className="feature-card feature-card--dark"><span className="feature-card__number">01 / BID</span><div className="feature-icon feature-icon--lime">↗</div><h3>Keep every bid visible.</h3><p>See who is leading, follow the bid as it changes, and keep the auction moving without losing the thread.</p><a href="#how-it-works">Explore the auction flow <span>↗</span></a></article>
+              <article className="feature-card"><span className="feature-card__number">01 / BID</span><div className="feature-icon">↗</div><h3>Keep every bid visible.</h3><p>See who is leading, follow the bid as it changes, and keep the auction moving without losing the thread.</p><a href="#how-it-works">Explore the auction flow <span>↗</span></a></article>
               <article className="feature-card"><span className="feature-card__number">02 / PURSE</span><div className="feature-icon">₹</div><h3>Know what’s left to spend.</h3><p>Keep each team’s budget in view as players are picked, helping captains plan the next move.</p><a href="#how-it-works">See purse management <span>↗</span></a></article>
               <article className="feature-card"><span className="feature-card__number">03 / SQUAD</span><div className="feature-icon">✳</div><h3>Build a balanced XI.</h3><p>Track squad size and player roles together, from the first pick through the closing bid.</p><a href="#how-it-works">Build your team <span>↗</span></a></article>
             </div>
+            <AuctionAd />
           </div>
         </section>
 
@@ -180,13 +214,12 @@ function LandingPage({ user, sessionReady, onAuthenticated, onLogout }) {
             <div className="pricing-heading"><div><p className="eyebrow"><span className="eyebrow__line" /> PRICING THAT PLAYS FAIR</p><h2>Choose your<br /><em>auction setup.</em></h2></div><p>Start with what you need today. Move up when your tournament grows.</p></div>
             <div className="pricing-grid">
               {plans.map((plan, index) => (
-                <article className={`pricing-card${plan.featured ? ' pricing-card--featured' : ''}`} key={plan.name}>
-                  {plan.featured && <span className="pricing-card__badge">MOST POPULAR</span>}
+                <article className="pricing-card" key={plan.name}>
                   <span className="pricing-card__index">0{index + 1} / PLAN</span>
                   <h3>{plan.name}</h3><p className="pricing-card__description">{plan.description}</p>
                   <p className="pricing-card__price">{plan.price}<span>{plan.cadence}</span></p>
                   <ul>{plan.features.map((feature) => <li key={feature}><span aria-hidden="true">✓</span>{feature}</li>)}</ul>
-                  <button className={`button ${plan.featured ? 'button--lime' : 'button--outline'}`} onClick={() => openAuth(user ? 'login' : 'signup')}>
+                  <button className="button button--outline" onClick={() => openAuth(user ? 'login' : 'signup')}>
                     {plan.action} <span aria-hidden="true">↗</span>
                   </button>
                 </article>
